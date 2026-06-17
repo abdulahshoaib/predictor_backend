@@ -16,7 +16,8 @@ async fn main() {
     let app = Router::new()
         .route("/matches", get(get_matches))
         .route("/health", get(health_check))
-        .with_state(state.clone());
+        .with_state(state.clone())
+        .layer(cors);
 
     let listener = TcpListener::bind(format!("0.0.0.0:{}", &state.port))
         .await
