@@ -16,7 +16,7 @@ pub async fn get_matches(State(state): State<AppState>) -> Result<Json<serde_jso
         .await
         .map_err(|e| e.to_string())?;
 
-    println!("Fetched matches: {:?}", data);
+    // println!("Fetched matches: {:?}", data);
 
     Ok(Json(data))
 }
