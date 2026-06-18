@@ -1,8 +1,13 @@
 mod handlers;
 mod state;
 
-use axum::{Router, routing::get};
-use handlers::{health::health_check, matches::get_matches};
+use axum::{
+    Router,
+    routing::{get, post},
+};
+use handlers::{
+    health::health_check, matches::get_matches, predict::get_predict, predict::put_prediction,
+};
 use state::AppState;
 use tokio::net::TcpListener;
 use tower_http::cors::{Any, CorsLayer};
@@ -11,11 +16,16 @@ use tower_http::cors::{Any, CorsLayer};
 async fn main() {
     let state = AppState::new();
 
-    let cors = CorsLayer::new().allow_origin(Any);
+    let cors = CorsLayer::new()
+        .allow_origin(Any)
+        .allow_headers(Any)
+        .allow_methods(Any);
 
     let app = Router::new()
         .route("/matches", get(get_matches))
         .route("/health", get(health_check))
+        .route("/predict", get(get_predict))
+        .route("/predict", post(put_prediction))
         .with_state(state.clone())
         .layer(cors);
 
