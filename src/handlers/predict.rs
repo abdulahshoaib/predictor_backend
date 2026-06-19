@@ -61,7 +61,10 @@ pub async fn put_prediction(
 
     let res = state
         .client
-        .post(format!("{}/rest/v1/predictions", state.supabase_url))
+        .post(format!(
+            "{}/rest/v1/predictions?on_conflict=match_id,user_id",
+            state.supabase_url
+        ))
         .header("apikey", &state.service_key)
         .header("Authorization", auth_header)
         .header(
